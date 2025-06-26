@@ -1,3 +1,3 @@
 # raven util
 
-Bevy related utility functions I end up reusing.
+Collection of tools I want to have access to everywhere
