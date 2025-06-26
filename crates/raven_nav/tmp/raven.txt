@@ -1,0 +1,7 @@
+heightfield-prune
+
+Voxelize time: build 3.309787ms, alloc 391.714µs, process 65ns, vertexs: 0, size: 15376
+
+base
+
+Voxelize time: build 10.214341ms, alloc 391.404µs, process 3.050484ms, vertexs: 124002, size: 15376

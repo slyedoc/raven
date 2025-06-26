@@ -1,0 +1,35 @@
+[package]
+name = "rts"
+version = "0.1.0"
+edition = "2021"
+
+
+[features]
+default = ["dev"]
+webgl2 = []
+dev = [ 
+  "dep:raven_editor",
+  "bevy/bevy_dev_tools",
+  "bevy/embedded_watcher",
+  "bevy/file_watcher",  
+  "bevy/asset_processor",
+  #"bevy/track_change_detection"  
+]
+
+
+[dependencies]
+bevy = "0.16"
+raven_bvh = { path = "../../crates/raven_bvh", features = ["camera"] }
+raven_nav = { path = "../../crates/raven_nav", features = ["debug_draw"] }
+raven_util = { path = "../../crates/raven_util" }
+raven_editor = { path = "../../crates/raven_editor", features = ["avian3d", "bvh", "nav"], optional = true}
+avian3d = { version = "0.3", features = ["debug-plugin", ] } # "simd", "parallel", "f32", "parry-f32", "serialize"
+#vleue_navigator = { git = "https://github.com/slyedoc/vleue_navigator", branch = "bevy_main", features = ["avian3d", "debug-with-gizmos"] } # debug-with-gizmos, detailed-layers
+
+# utils
+rand = "0.8"
+serde = { version = "1", features = ["derive"] }
+strum = "0.26"
+strum_macros = "0.26"
+clap = { version = "4.5", features = ["derive"] }
+bevy_skein = "0.2.1"

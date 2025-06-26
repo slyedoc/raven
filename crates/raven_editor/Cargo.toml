@@ -1,0 +1,44 @@
+[package]
+name = "raven_editor"
+version = "0.1.0"
+edition = "2021"
+
+[features]
+default = ["fps"]
+fps = []
+prefab = ["bevy/meshlet_processor"]
+avian3d = ["dep:avian3d"]
+bvh = ["dep:raven_bvh"]
+nav = ["dep:raven_nav"]
+
+
+
+[dependencies]
+bevy = { version = "0.16", features = [
+    "bevy_dev_tools", 
+    "bevy_ui_debug",
+    "bevy_debug_stepping",     
+] }
+bevy-inspector-egui = { version = "0.31" , features = [
+    "bevy_pbr",
+    "highlight_changes",
+] }
+raven_bvh = { path = "../../crates/raven_bvh", features = ["debug_draw", "camera"], optional = true }
+raven_nav = { path = "../../crates/raven_nav", features = ["debug_draw"], optional = true }
+raven_util = { path = "../../crates/raven_util" }
+avian3d = { version = "0.3", features = ["diagnostic_ui"], optional = true }
+#approx.workspace = true
+#serde = { workspace = true, features = ["derive"] }
+
+
+
+
+[[example]]
+name = "simple"
+
+[[example]]
+name = "avian"
+required-features = ["avian3d"]
+
+
+

@@ -1,0 +1,177 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'raven_bvh'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=raven_bvh"
+                ],
+                "filter": {
+                    "name": "raven_bvh",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'clock_tower'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=clock_tower",
+                    "--package=raven_bvh"
+                ],
+                "filter": {
+                    "name": "clock_tower",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'clock_tower'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=clock_tower",
+                    "--package=raven_bvh"
+                ],
+                "filter": {
+                    "name": "clock_tower",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'main'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=main",
+                    "--package=raven_bvh",
+                    "--features=camera"
+                ],
+                "filter": {
+                    "name": "main",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'main'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=main",
+                    "--package=raven_bvh"
+                ],
+                "filter": {
+                    "name": "main",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'sponza'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=sponza",
+                    "--package=raven_bvh"
+                ],
+                "filter": {
+                    "name": "sponza",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'sponza'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=sponza",
+                    "--package=raven_bvh"
+                ],
+                "filter": {
+                    "name": "sponza",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug benchmark 'bevy'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bench=bevy",
+                    "--package=raven_bvh"
+                ],
+                "filter": {
+                    "name": "bevy",
+                    "kind": "bench"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug benchmark 'random_scene'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bench=random_scene",
+                    "--package=raven_bvh"
+                ],
+                "filter": {
+                    "name": "random_scene",
+                    "kind": "bench"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

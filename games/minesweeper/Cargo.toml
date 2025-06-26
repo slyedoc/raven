@@ -1,0 +1,27 @@
+[package]
+name = "minesweeper"
+version = "0.1.0"
+edition = "2024"
+
+[features]
+default = []
+dev = ["raven_editor", "bevy/file_watcher", "bevy/track_location", "clap"]
+
+
+[dependencies]
+bevy = { version = "0.16" }
+bevy-inspector-egui = { version = "0.31", features = [
+    "bevy_pbr",
+    "highlight_changes",
+] }
+bevy_tweening = { git = "https://github.com/slyedoc/bevy_tweening.git", branch = "bevy_0.16" }
+bevy_rand = { git = "https://github.com/slyedoc/bevy_rand.git", branch = "bevy_0.16", features = ["rand_chacha", "wyrand"] }
+rand_core = "0.9"
+rand = "0.9"
+
+# optional dependencies
+raven_editor = { path = "../../crates/raven_editor", optional = true }
+clap = { version = "4.0", features = ["derive"], optional = true}
+bevy_spawn_observer = "0.1.0"
+cfg-if = "1.0"
+#bevy_ui_text_input = "0.3.0"

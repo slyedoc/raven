@@ -1,0 +1,20 @@
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 1 test
+test camera ... ignored
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 4 tests
+test scene_100k_1024 ... ignored
+test scene_1k_1024 ... ignored
+test random_scene_100k_256 ... bench:  46,866,216.80 ns/iter (+/- 3,362,328.48)
+test random_scene_1k_256   ... bench:   3,326,331.35 ns/iter (+/- 326,534.57)
+
+test result: ok. 0 passed; 0 failed; 2 ignored; 2 measured; 0 filtered out; finished in 21.29s
+

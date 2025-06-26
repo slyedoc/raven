@@ -1,0 +1,13 @@
+[package]
+name = "tic-tac-toe"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bevy = "0.16"
+rand = "0.8.4"
+
+[features]
+default = []
+
+

@@ -1,0 +1,8 @@
+
+running 3 tests
+test archipelago::test_tile_origin ... ignored
+test archipelago::test_tile_tile_containing_position ... ignored
+test heightfields::tests::test_build_heightfield_tile ... bench:   8,115,636.15 ns/iter (+/- 410,607.93)
+
+test result: ok. 0 passed; 0 failed; 2 ignored; 1 measured; 0 filtered out; finished in 7.33s
+

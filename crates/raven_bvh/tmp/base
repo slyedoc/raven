@@ -1,0 +1,14 @@
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 4 tests
+test scene_100k_1024 ... ignored
+test scene_1k_1024 ... ignored
+test random_scene_100k_256 ... bench: 151,760,819.90 ns/iter (+/- 476,383.23)
+test random_scene_1k_256   ... bench:  10,670,878.90 ns/iter (+/- 57,102.36)
+
+test result: ok. 0 passed; 0 failed; 2 ignored; 2 measured; 0 filtered out; finished in 48.91s
+

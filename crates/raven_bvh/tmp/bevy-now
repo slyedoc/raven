@@ -1,0 +1,38 @@
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 1 test
+test camera ... ignored
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 4 tests
+test scene_100k_1024 ... ignored
+test scene_1k_1024 ... ignored
+test random_scene_100k_256 ... FAILED
+test random_scene_1k_256   ... FAILED
+
+failures:
+
+---- random_scene_100k_256 stdout ----
+
+thread 'Compute Task Pool (23)' panicked at /home/slyedoc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_ecs-0.16.1/src/error/handler.rs:141:1:
+Encountered an error in system `raven_bvh::camera::render_camera`: Parameter `Res<GizmoConfigStore>` failed validation: Resource does not exist
+
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+Encountered a panic in system `bevy_app::main_schedule::Main::run_main`!
+
+---- random_scene_1k_256 stdout ----
+Encountered a panic in system `bevy_app::main_schedule::Main::run_main`!
+
+
+failures:
+    random_scene_100k_256
+    random_scene_1k_256
+
+test result: FAILED. 0 passed; 2 failed; 2 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
