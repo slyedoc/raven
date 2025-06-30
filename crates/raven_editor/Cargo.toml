@@ -26,7 +26,7 @@ bevy-inspector-egui = { version = "0.31" , features = [
 raven_bvh = { path = "../../crates/raven_bvh", features = ["debug_draw", "camera"], optional = true }
 raven_nav = { path = "../../crates/raven_nav", features = ["debug_draw"], optional = true }
 raven_util = { path = "../../crates/raven_util" }
-avian3d = { version = "0.3", features = ["diagnostic_ui"], optional = true }
+avian3d = { version = "0.3",  features = ["debug-plugin", "diagnostic_ui"], optional = true }
 #approx.workspace = true
 #serde = { workspace = true, features = ["derive"] }
 

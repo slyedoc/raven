@@ -24,7 +24,7 @@ pub(super) fn plugin(app: &mut App) {
         base::plugin,
         smelter::plugin,
         spawner::plugin::<Worker>,
-        //spawner::plugin::<Footmen>,
+        spawner::plugin::<Footmen>,
         tower::plugin,
     ))
     .add_observer(on_add_building);

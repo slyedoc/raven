@@ -1333,6 +1333,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "bevy_prng"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "41c76ebff351c2123628086ccef32fb9ae476519dc13f605d3680c17da5c40fb"
+dependencies = [
+ "bevy_reflect",
+ "rand_chacha 0.9.0",
+ "rand_core 0.6.4",
+ "rand_core 0.9.3",
+ "rand_pcg",
+ "rand_xoshiro",
+ "serde",
+ "wyrand",
+]
+
+[[package]]
 name = "bevy_ptr"
 version = "0.16.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1345,7 +1361,24 @@ source = "git+https://github.com/slyedoc/bevy_rand.git?branch=bevy_0.16#b720355e
 dependencies = [
  "bevy_app",
  "bevy_ecs",
- "bevy_prng",
+ "bevy_prng 0.10.0",
+ "bevy_reflect",
+ "getrandom 0.3.3",
+ "rand_chacha 0.9.0",
+ "rand_core 0.6.4",
+ "rand_core 0.9.3",
+ "serde",
+]
+
+[[package]]
+name = "bevy_rand"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "33ae51425b1886ff7c5a4a74fe2f4d0191b8e59f6409e3c84a3fccdbc8b63a93"
+dependencies = [
+ "bevy_app",
+ "bevy_ecs",
+ "bevy_prng 0.11.0",
  "bevy_reflect",
  "getrandom 0.3.3",
  "rand_chacha 0.9.0",
@@ -2990,9 +3023,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "26145e563e54f2cadc477553f1ec5ee650b00862f0a58bcd12cbdc5f0ea2d2f4"
 dependencies = [
  "cfg-if",
+ "js-sys",
  "libc",
  "r-efi",
  "wasi 0.14.2+wasi-0.2.4",
+ "wasm-bindgen",
 ]
 
 [[package]]
@@ -3830,7 +3865,7 @@ version = "0.1.0"
 dependencies = [
  "bevy",
  "bevy-inspector-egui",
- "bevy_rand",
+ "bevy_rand 0.10.0",
  "bevy_spawn_observer",
  "bevy_tweening 0.12.0",
  "cfg-if",
@@ -4027,6 +4062,15 @@ name = "nohash-hasher"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2bf50223579dc7cdcfb3bfcacf7069ff68243f8c363f62ffa99cf000a6b9c451"
+
+[[package]]
+name = "noisy_bevy"
+version = "0.10.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6091c1edbdaeb288e4108f56310c0b3fe597133a0f5be9f39fc54a3940834271"
+dependencies = [
+ "bevy",
+]
 
 [[package]]
 name = "nom"
@@ -5056,6 +5100,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "raven_brain"
+version = "0.2.0"
+dependencies = [
+ "avian3d",
+ "bevy",
+ "raven_editor",
+ "raven_util",
+]
+
+[[package]]
 name = "raven_bvh"
 version = "0.2.0"
 dependencies = [
@@ -5098,6 +5152,21 @@ dependencies = [
  "smallvec",
  "strum 0.27.1",
  "strum_macros 0.27.1",
+]
+
+[[package]]
+name = "raven_terrain"
+version = "0.1.0"
+dependencies = [
+ "avian3d",
+ "bevy",
+ "bevy-inspector-egui",
+ "bevy_rand 0.11.0",
+ "noisy_bevy",
+ "rand 0.9.1",
+ "rand_core 0.9.3",
+ "raven_editor",
+ "raven_util",
 ]
 
 [[package]]
@@ -5299,16 +5368,18 @@ version = "0.1.0"
 dependencies = [
  "avian3d",
  "bevy",
+ "bevy_rand 0.11.0",
  "bevy_skein",
  "clap",
- "rand 0.8.5",
+ "rand 0.9.1",
+ "rand_core 0.9.3",
  "raven_bvh",
  "raven_editor",
  "raven_nav",
  "raven_util",
  "serde",
- "strum 0.26.3",
- "strum_macros 0.26.4",
+ "strum 0.27.1",
+ "strum_macros 0.27.1",
 ]
 
 [[package]]

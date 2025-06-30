@@ -24,12 +24,16 @@ raven_nav = { path = "../../crates/raven_nav", features = ["debug_draw"] }
 raven_util = { path = "../../crates/raven_util" }
 raven_editor = { path = "../../crates/raven_editor", features = ["avian3d", "bvh", "nav"], optional = true}
 avian3d = { version = "0.3", features = ["debug-plugin", ] } # "simd", "parallel", "f32", "parry-f32", "serialize"
+bevy_skein = "0.2.1"
 #vleue_navigator = { git = "https://github.com/slyedoc/vleue_navigator", branch = "bevy_main", features = ["avian3d", "debug-with-gizmos"] } # debug-with-gizmos, detailed-layers
 
 # utils
-rand = "0.8"
 serde = { version = "1", features = ["derive"] }
-strum = "0.26"
-strum_macros = "0.26"
+strum = "0.27"
+strum_macros = "0.27"
 clap = { version = "4.5", features = ["derive"] }
-bevy_skein = "0.2.1"
+
+# rand
+rand_core = "0.9"
+rand = "0.9"
+bevy_rand = { version = "0.11", features = ["rand_chacha", "wyrand"] }

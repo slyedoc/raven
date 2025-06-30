@@ -5,7 +5,7 @@ pub fn plugin(app: &mut App) {
         .add_observer(on_add_footmen);
 }
 
-#[derive(Component)]
+#[derive(Component, Default)]
 #[require(Unit)]
 #[require(MovementAcceleration = MovementAcceleration(30.))]
 #[require(Health = Health::new(100.))]

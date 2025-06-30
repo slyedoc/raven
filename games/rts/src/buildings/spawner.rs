@@ -1,6 +1,6 @@
 use crate::{prelude::*, states::in_paused::InPaused};
 
-pub(super) fn plugin<T: Component>(app: &mut App) {
+pub(super) fn plugin<T: Component + Default>(app: &mut App) {
     app.add_systems(
         FixedUpdate,
         (update_spawners::<T>.run_if(in_state(InPaused::Disabled)),),
@@ -12,12 +12,12 @@ pub(super) fn plugin<T: Component>(app: &mut App) {
 #[reflect(Component)]
 #[require(Team)]
 
-pub struct Spawner<T: Component> {
+pub struct Spawner<T: Component + Default> {
     pub timer: Timer,
     pub marker: PhantomData<T>,
 }
 
-impl<T: Component> Default for Spawner<T> {
+impl<T: Component + Default> Default for Spawner<T> {
     fn default() -> Self {
         Self {
             timer: Timer::from_seconds(10.0, TimerMode::Repeating),
@@ -26,18 +26,21 @@ impl<T: Component> Default for Spawner<T> {
     }
 }
 
-fn update_spawners<T: Component>(
+fn update_spawners<T: Component + Default>(
     time: Res<Time<Physics>>,
     mut query: Query<(&GlobalTransform, &mut Spawner<T>, &Team)>,
     mut commands: Commands,
 ) {
     for (gt, mut spawner, team) in query.iter_mut() {
+        
         if spawner.timer.tick(time.delta()).just_finished() {
+            
             for i in 0..3 {
                 commands
                     .spawn((
                         Transform::from_translation(gt.translation() + vec3(i as f32 * 2., 0., 0.)),
-                        Footmen,
+                        T::default(),
+                        StateScoped(AppState::InGame),
                         *team,
                     ))
                     .trigger(team.goal());
@@ -46,7 +49,7 @@ fn update_spawners<T: Component>(
     }
 }
 
-fn draw_debug<T: Component>(
+fn draw_debug<T: Component + Default>(
     query: Query<(&GlobalTransform, &Team), With<Spawner<T>>>,
     mut gizmos: Gizmos,
 ) {

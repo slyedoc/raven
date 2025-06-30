@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-#[derive(Component)]
+#[derive(Component, Default)]
 #[require(Unit)]
 #[require(Name = Name::new("Worker"))]
 #[require(Health = Health::new(100.))]

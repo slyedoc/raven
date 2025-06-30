@@ -7,6 +7,136 @@
         {
             "type": "lldb",
             "request": "launch",
+            "name": "Debug executable 'minesweeper'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=minesweeper",
+                    "--package=minesweeper"
+                ],
+                "filter": {
+                    "name": "minesweeper",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'minesweeper'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=minesweeper",
+                    "--package=minesweeper"
+                ],
+                "filter": {
+                    "name": "minesweeper",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'raven_editor'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=raven_editor"
+                ],
+                "filter": {
+                    "name": "raven_editor",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'avian'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=avian",
+                    "--package=raven_editor"
+                ],
+                "filter": {
+                    "name": "avian",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'avian'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=avian",
+                    "--package=raven_editor"
+                ],
+                "filter": {
+                    "name": "avian",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'simple'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=simple",
+                    "--package=raven_editor"
+                ],
+                "filter": {
+                    "name": "simple",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'simple'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=simple",
+                    "--package=raven_editor"
+                ],
+                "filter": {
+                    "name": "simple",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
             "name": "Debug unit tests in library 'raven_bvh'",
             "cargo": {
                 "args": [
@@ -18,6 +148,43 @@
                 "filter": {
                     "name": "raven_bvh",
                     "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'bvh'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=bvh",
+                    "--package=raven_bvh"
+                ],
+                "filter": {
+                    "name": "bvh",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'bvh'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=bvh",
+                    "--package=raven_bvh"
+                ],
+                "filter": {
+                    "name": "bvh",
+                    "kind": "example"
                 }
             },
             "args": [],
@@ -54,44 +221,6 @@
                 ],
                 "filter": {
                     "name": "clock_tower",
-                    "kind": "example"
-                }
-            },
-            "args": [],
-            "cwd": "${workspaceFolder}"
-        },
-        {
-            "type": "lldb",
-            "request": "launch",
-            "name": "Debug example 'main'",
-            "cargo": {
-                "args": [
-                    "build",
-                    "--example=main",
-                    "--package=raven_bvh",
-                    "--features=camera"
-                ],
-                "filter": {
-                    "name": "main",
-                    "kind": "example"
-                }
-            },
-            "args": [],
-            "cwd": "${workspaceFolder}"
-        },
-        {
-            "type": "lldb",
-            "request": "launch",
-            "name": "Debug unit tests in example 'main'",
-            "cargo": {
-                "args": [
-                    "test",
-                    "--no-run",
-                    "--example=main",
-                    "--package=raven_bvh"
-                ],
-                "filter": {
-                    "name": "main",
                     "kind": "example"
                 }
             },
@@ -138,16 +267,53 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug benchmark 'bevy'",
+            "name": "Debug example 'tlas'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=tlas",
+                    "--package=raven_bvh"
+                ],
+                "filter": {
+                    "name": "tlas",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'tlas'",
             "cargo": {
                 "args": [
                     "test",
                     "--no-run",
-                    "--bench=bevy",
+                    "--example=tlas",
                     "--package=raven_bvh"
                 ],
                 "filter": {
-                    "name": "bevy",
+                    "name": "tlas",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug benchmark 'common'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bench=common",
+                    "--package=raven_bvh"
+                ],
+                "filter": {
+                    "name": "common",
                     "kind": "bench"
                 }
             },
@@ -168,6 +334,454 @@
                 "filter": {
                     "name": "random_scene",
                     "kind": "bench"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'raven_util'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=raven_util"
+                ],
+                "filter": {
+                    "name": "raven_util",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'raven_nav'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=raven_nav"
+                ],
+                "filter": {
+                    "name": "raven_nav",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'agent'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=agent",
+                    "--package=raven_nav"
+                ],
+                "filter": {
+                    "name": "agent",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'agent'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=agent",
+                    "--package=raven_nav"
+                ],
+                "filter": {
+                    "name": "agent",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'cubes'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=cubes",
+                    "--package=raven_nav"
+                ],
+                "filter": {
+                    "name": "cubes",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'cubes'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=cubes",
+                    "--package=raven_nav"
+                ],
+                "filter": {
+                    "name": "cubes",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'heightfield'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=heightfield",
+                    "--package=raven_nav"
+                ],
+                "filter": {
+                    "name": "heightfield",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'heightfield'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=heightfield",
+                    "--package=raven_nav"
+                ],
+                "filter": {
+                    "name": "heightfield",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'multi'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=multi",
+                    "--package=raven_nav"
+                ],
+                "filter": {
+                    "name": "multi",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'multi'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=multi",
+                    "--package=raven_nav"
+                ],
+                "filter": {
+                    "name": "multi",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'simple'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=simple",
+                    "--package=raven_nav"
+                ],
+                "filter": {
+                    "name": "simple",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'simple'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=simple",
+                    "--package=raven_nav"
+                ],
+                "filter": {
+                    "name": "simple",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug benchmark 'common'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bench=common",
+                    "--package=raven_nav"
+                ],
+                "filter": {
+                    "name": "common",
+                    "kind": "bench"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'rts'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=rts"
+                ],
+                "filter": {
+                    "name": "rts",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'rts'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=rts",
+                    "--package=rts"
+                ],
+                "filter": {
+                    "name": "rts",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'rts'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=rts",
+                    "--package=rts"
+                ],
+                "filter": {
+                    "name": "rts",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'tic-tac-toe'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=tic-tac-toe",
+                    "--package=tic-tac-toe"
+                ],
+                "filter": {
+                    "name": "tic-tac-toe",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'tic-tac-toe'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=tic-tac-toe",
+                    "--package=tic-tac-toe"
+                ],
+                "filter": {
+                    "name": "tic-tac-toe",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'raven_brain'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=raven_brain"
+                ],
+                "filter": {
+                    "name": "raven_brain",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'brain_1'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=brain_1",
+                    "--package=raven_brain"
+                ],
+                "filter": {
+                    "name": "brain_1",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'brain_1'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=brain_1",
+                    "--package=raven_brain"
+                ],
+                "filter": {
+                    "name": "brain_1",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'raven_terrain'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=raven_terrain"
+                ],
+                "filter": {
+                    "name": "raven_terrain",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'basic'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=basic",
+                    "--package=raven_terrain",
+                    "--features=bevy/wayland",
+                ],
+                "filter": {
+                    "name": "basic",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'basic'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=basic",
+                    "--package=raven_terrain"
+                ],
+                "filter": {
+                    "name": "basic",
+                    "kind": "example"
                 }
             },
             "args": [],

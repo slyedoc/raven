@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy_enhanced_input::prelude::*;
 
-pub(super) const DEFAULT_SPEED: f32 = 0.1;
+pub(super) const DEFAULT_SPEED: f32 = 0.2;
 pub(super) const DEFAULT_ROTATION: f32 = 0.003;
 
 pub struct CameraFreePlugin;
@@ -45,7 +45,7 @@ fn default_binding(
             Cardinal::wasd_keys().with_conditions_each(BlockBy::<EnableSprint>::default()),
             Cardinal::wasd_keys()
                 .with_conditions_each(Chord::<EnableSprint>::default())
-                .with_modifiers_each(Scale::splat(10.0)),
+                .with_modifiers_each(Scale::splat(20.0)),
         ))
         // Don't trigger the action when the chord is active.
         .with_modifiers((

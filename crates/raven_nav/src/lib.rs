@@ -386,7 +386,7 @@ fn start_tile_build_tasks(
                     geometry_result,
                     entity,
                     transform,
-                    Some(nav_mesh_affector.0),
+                    nav_mesh_affector.0,
                     &mut geometry_collections,
                     &mut heightfield_collections,
                     &mut heightfields,

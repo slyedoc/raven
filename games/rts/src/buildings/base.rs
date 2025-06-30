@@ -14,7 +14,7 @@ pub fn plugin(app: &mut App) {
     width: 4.,
     ..default()
 })]
-#[require(NavMeshAffector)]
+#[require(NavMeshAffector = NavMeshAffector(None))]
 pub struct Base;
 
 pub fn on_add_base(

@@ -8,8 +8,14 @@ use avian3d::parry::{
 use bevy::{ecs::entity::EntityHashMap, prelude::*};
 
 /// Add this to any compoent with a Collider to indicate that it is a nav-mesh affector.
-#[derive(Component, Default, Reflect)]
-pub struct NavMeshAffector(pub Area);
+#[derive(Component, Reflect)]
+pub struct NavMeshAffector(pub Option<Area>);
+
+impl Default for NavMeshAffector {
+    fn default() -> Self {
+        NavMeshAffector(Some(Area(0)))
+    }
+}
 
 /// The area type of the nav-mesh affector.
 #[derive(Default, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Reflect)]

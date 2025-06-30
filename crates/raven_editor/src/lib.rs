@@ -60,6 +60,7 @@ impl Plugin for EditorPlugin {
                 enable_multipass_for_primary_context: true,
             },
             DefaultInspectorConfigPlugin,
+            
             select::SelectPlugin,
             #[cfg(feature = "fps")]
             fps::FpsPlugin,
@@ -69,28 +70,29 @@ impl Plugin for EditorPlugin {
 
         #[cfg(feature = "avian3d")]
         {
-            if !app.is_plugin_added::<PhysicsDebugPlugin>() {
-                app.add_plugins(PhysicsDebugPlugin::default());
-            }
-            if !app.is_plugin_added::<PhysicsDiagnosticsPlugin>() {
-                app.add_plugins(PhysicsDiagnosticsPlugin);
-            }
-            if !app.is_plugin_added::<PhysicsDiagnosticsUiPlugin>() {
-                app.add_plugins(PhysicsDiagnosticsUiPlugin);
-            }
+            app.add_plugins(PhysicsDebugPlugin::default());
+            // if !app.is_plugin_added::<PhysicsDebugPlugin>() {
+            //     app.add_plugins(PhysicsDebugPlugin::default());
+            // }
+            // if !app.is_plugin_added::<PhysicsDiagnosticsPlugin>() {
+            //     app.add_plugins(PhysicsDiagnosticsPlugin);
+            // }
+            // if !app.is_plugin_added::<PhysicsDiagnosticsUiPlugin>() {
+            //     app.add_plugins(PhysicsDiagnosticsUiPlugin);
+            // }
 
-            app.insert_resource(PhysicsDiagnosticsUiSettings {
-                enabled: false,
-                ..default()
-            })
-            .insert_gizmo_config(
-                PhysicsGizmos::default(),
-                GizmoConfig {
-                    enabled: false,
-                    render_layers: self.render_layer_3d.clone(),
-                    ..default()
-                },
-            );
+            // app.insert_resource(PhysicsDiagnosticsUiSettings {
+            //     enabled: false,
+            //     ..default()
+            // })
+            // .insert_gizmo_config(
+            //     PhysicsGizmos::default(),
+            //     GizmoConfig {
+            //         enabled: false,
+            //         render_layers: self.render_layer_3d.clone(),
+            //         ..default()
+            //     },
+            // );
         }
 
         #[cfg(feature = "bvh")]

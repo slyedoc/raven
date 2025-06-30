@@ -1,0 +1,20 @@
+[package]
+name = "raven_brain"
+version = "0.2.0"
+edition = "2024"
+exclude = ["assets"]
+
+[lib]
+crate-type = ["lib"] 
+
+[features]
+default = []
+
+[dependencies]
+bevy =  { version = "0.16" }
+
+
+[dev-dependencies]
+avian3d = "0.3"
+raven_util = { path = "../../crates/raven_util" }
+raven_editor = { path = "../../crates/raven_editor", features = ["avian3d"] }

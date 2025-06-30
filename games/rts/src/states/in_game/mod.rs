@@ -115,31 +115,36 @@ fn setup_game(
             Name::new("Tower"),
             Tower,
             team.clone(),
+            StateScoped(AppState::InGame),
             Transform::from_xyz(offset * 20.0, 2.0, 0.),
         ));
 
         commands.spawn((
             team.clone(),
             Spawner::<Footmen>::default(),
+            StateScoped(AppState::InGame),
             Transform::from_xyz(offset * 15.0, 1.0, 0.),
         ));
 
         commands.spawn((
             team.clone(),
             Footmen,
+            StateScoped(AppState::InGame),
             Transform::from_xyz(offset * 15.0, 1.0, 0.),
         ));
 
         commands.spawn((
             team.clone(),
             Worker,
+            StateScoped(AppState::InGame),
             Transform::from_xyz(offset * 18.0, 1.0, 0.),
         ));
 
         commands.spawn((
             Base,
             team.clone(),
-            Transform::from_xyz(offset * 30., 1.5, 0.),
+            StateScoped(AppState::InGame),
+            Transform::from_xyz(offset * 30., 1.4, 0.),
         ));
     }
 
@@ -155,12 +160,20 @@ fn setup_game(
 
     // Begin with three mushrooms our miner can eat
     for _i in 0..30 {
-        commands.spawn((Mushroom, Transform::from_translation(map_size.random())));
+        commands.spawn((
+            Mushroom, 
+            StateScoped(AppState::InGame),
+            Transform::from_translation(map_size.random())
+        ));
     }
 
     // Spawn 10 ores we can mine as well
     for _i in 0..30 {
-        commands.spawn((Ore, Transform::from_translation(map_size.random())));
+        commands.spawn((
+            Ore, 
+            StateScoped(AppState::InGame),
+            Transform::from_translation(map_size.random())
+        ));
     }
 }
 
