@@ -13,6 +13,6 @@ While ideal to use the gpu, building workflow like this was pain, and the fork o
 
 
 Other resources
-- [SimonDev](https://www.youtube.com/watch?v=HIYs7Hoq2yQ) and [repos](https://github.com/simondevyoutube?tab=repositories&q=terrain&type=&language=&sort=) 
-- 
+- [SimonDev](https://www.youtube.com/playlist?list=PLRL3Z3lpLmH3PNGZuDNf2WXnLTHpN9hXy) and [repos](https://github.com/simondevyoutube?tab=repositories&q=terrain&type=&language=&sort=) 
+- [bevy_triplanar_splatting](https://github.com/bonsairobo/bevy_triplanar_splatting)
 - [Yu266426/Bevy-Erosion](https://github.com/Yu266426/Bevy-Erosion/) 

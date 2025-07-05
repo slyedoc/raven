@@ -7,7 +7,7 @@ edition = "2024"
 default = []
 
 [dependencies]
-bevy = "0.16"
+bevy = { version = "0.16"}
 avian3d = "0.3"
 raven_util = { path = "../../crates/raven_util" }
 
@@ -17,10 +17,15 @@ rand_core = "0.9"
 rand = "0.9"
 bevy_rand = { version = "0.11", features = ["rand_chacha", "wyrand"] }
 bevy-inspector-egui = { version = "0.31" }
+bytemuck = "1.23"
 [target.'cfg(all(target_family = "wasm", any(target_os = "unknown", target_os = "none")))'.dependencies]
 bevy_rand = { version = "0.11", features = ["wasm_js"] }
 
 [dev-dependencies]
 raven_editor = { path = "../../crates/raven_editor", features = ["avian3d"] }
+bevy_asset_loader = "0.23"
 
 
+[[example]]
+name = "basic"
+required-features = []

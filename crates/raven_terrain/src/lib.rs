@@ -1,6 +1,9 @@
-mod quadtree;
+#![allow(unused_imports)]
 mod debug;
+mod quadtree;
+mod triplaner;
 //mod water;
+
 
 use avian3d::prelude::*;
 use bevy::{
@@ -9,7 +12,10 @@ use bevy::{
     math::bounding::{Aabb3d, BoundingVolume},
     platform::{collections::HashMap, hash::FixedHasher},
     prelude::*,
-    render::mesh::{Indices, PrimitiveTopology},
+    render::{
+        mesh::{Indices, PrimitiveTopology},
+        render_resource::{Extent3d, TextureDimension, TextureFormat},
+    },
 };
 use bevy_inspector_egui::{inspector_options::std_options::NumberDisplay, prelude::*};
 use bevy_rand::prelude::*;
@@ -18,6 +24,7 @@ use raven_util::prelude::*;
 
 pub mod prelude {
     pub use crate::{
+        triplaner::*,
         TerrainChunk,
         TerrainGenerator,
         TerrainPlugin,
@@ -28,6 +35,8 @@ pub mod prelude {
 
 use quadtree::QuadTree;
 
+use crate::triplaner::TriplanarMaterialPlugin;
+
 pub struct TerrainPlugin;
 
 impl Plugin for TerrainPlugin {
@@ -36,7 +45,9 @@ impl Plugin for TerrainPlugin {
             app.add_plugins(EntropyPlugin::<WyRand>::default());
         }
 
-        app.add_systems(
+        app
+        .add_plugins(TriplanarMaterialPlugin)
+        .add_systems(
             Update,
             (
                 //build_terrain,
@@ -110,12 +121,14 @@ fn update_quad_tree(
         }
 
         // add all new chunks
-        for (k, n) in &mut add {            
+        for (k, n) in &mut add {
             let e = commands
                 .spawn((
                     ChildOf(e),
                     Name::new(format!("Terrain Chunk {}", n.key())),
-                    TerrainChunk { size: n.dimensions[0], },
+                    TerrainChunk {
+                        size: n.dimensions[0],
+                    },
                     Transform::from_translation(Vec3::new(n.position.x, 0.0, n.position.y)),
                 ))
                 .id();
@@ -138,7 +151,7 @@ pub struct TerrainChunks(pub ChunkMap);
 pub struct TerrainGenerator {
     #[inspector(min = 0.01, max = 1000.0, speed = 100.0, display = NumberDisplay::Slider)]
     pub height: f32,
-    pub chunk_resolution: u32,    
+    pub chunk_resolution: u32,
     /// Offset for the noise, can be used to shift the terrain
     pub noise_offset: Vec2,
     // Scale of the noise
@@ -160,11 +173,11 @@ pub struct TerrainGenerator {
 
 impl Default for TerrainGenerator {
     fn default() -> Self {
-        Self {            
-            height: 500.0, // Height scale for the terrain
-            chunk_resolution: 64, // Resolution of the terrain chunks
+        Self {
+            height: 500.0,                     // Height scale for the terrain
+            chunk_resolution: 64,              // Resolution of the terrain chunks
             noise_offset: Vec2::new(0.0, 0.0), // Offset for the noise, can be used to shift the terrain
-            noise_scale: 2000.0,                  // Not used, but can be used to scale the noise            
+            noise_scale: 2000.0,               // Not used, but can be used to scale the noise
             octaves: 4,
             lacunarity: 3.5,
             persistence: 0.33,
@@ -207,20 +220,23 @@ impl Default for TerrainGenerator {
 #[derive(Component, Reflect, Debug, InspectorOptions)]
 #[reflect(Component, InspectorOptions)]
 pub struct TerrainChunk {
-    size: f32,    
+    size: f32,
 }
+
+#[derive(Component)]
+pub struct HeightImage(pub Handle<Image>);
 
 fn rebuild_terrain_on_change(
     mut commands: Commands,
     mut query: Query<(&Children, &mut TerrainChunks), Changed<TerrainGenerator>>,
 ) {
     // clear all children of the terrain generator
-    for ( children, mut chunks) in query.iter_mut() {
+    for (children, mut chunks) in query.iter_mut() {
         // Remove old children
         for child in children.iter() {
             commands.entity(child).despawn();
         }
-        chunks.0.clear();     
+        chunks.0.clear();
     }
 }
 
@@ -228,6 +244,7 @@ fn build_terrain_chunk(
     mut commands: Commands,
     query: Query<(Entity, &ChildOf, &Transform, &TerrainChunk), Changed<TerrainChunk>>,
     generator_query: Query<&TerrainGenerator>,
+    mut images: ResMut<Assets<Image>>,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
@@ -236,14 +253,13 @@ fn build_terrain_chunk(
             continue;
         };
 
-        // scale everything to 0.0..1.0        
+        // scale everything to 0.0..1.0
         // TODO: make reusable
         let res = generator.chunk_resolution as usize;
         let mut heightfield = vec![vec![0.0; res]; res];
         for x in 0..res {
             for y in 0..res {
                 heightfield[x][y] = {
-                                        
                     // noise
                     let n = {
                         // Calculate normalized coordinates in 0..1 for this point in the chunk
@@ -260,7 +276,7 @@ fn build_terrain_chunk(
 
                         Vec2::new(nx, ny)
                     };
-                    
+
                     let mut total_noise_contribution = 0.0;
                     let mut current_frequency_multiplier = 1.0;
                     let mut current_amplitude = 1.0;
@@ -287,23 +303,37 @@ fn build_terrain_chunk(
             }
         }
 
-        let scale = Vec3::new(
-            chunk.size,
-            generator.height,
-            chunk.size,
+        let mut flat: Vec<[u8; 4]> = Vec::with_capacity(res * res);
+        for y in 0..res {
+            for x in 0..res {
+                let h = (heightfield[x][y] * 255.0) as u8 as u8;
+                flat.push([h, h, h, 255]);
+            }
+        }
+        let image = Image::new_fill(
+            Extent3d {
+                width: res as u32,
+                height: res as u32,
+                depth_or_array_layers: 1,
+            },
+            TextureDimension::D2,
+            bytemuck::cast_slice(&flat),
+            TextureFormat::Rgba8UnormSrgb,
+            RenderAssetUsages::default(),
         );
+
+        let heightfield_handle = images.add(image);
+
+        let scale = Vec3::new(chunk.size, generator.height, chunk.size);
         commands.entity(e).insert((
-            Mesh3d(meshes.add(generate_mesh_from_heightfield(
-                &heightfield,
-                scale,
-                true,
-            ))),
+            Mesh3d(meshes.add(generate_mesh_from_heightfield(&heightfield, scale, true))),
             MeshMaterial3d(materials.add(StandardMaterial {
-                base_color: Color::srgb(1.0, 1.0, 1.0),
+                //base_color: Color::srgb(1.0, 1.0, 1.0),
+                base_color_texture: Some(heightfield_handle.clone()),
                 ..default()
             })),
-            Collider::heightfield(heightfield, scale),
-            RigidBody::Static,
+            //Collider::heightfield(heightfield, scale),
+            //RigidBody::Static,
         ));
     }
 }

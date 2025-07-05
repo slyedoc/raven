@@ -1,0 +1,9 @@
+[package]
+name = "lab"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bevy = "0.16"
+bevy_simple_subsecond_system = "0.2"
+raven_util = { path = "../../crates/raven_util" }

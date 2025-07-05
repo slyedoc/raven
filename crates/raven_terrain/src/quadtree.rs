@@ -1,6 +1,6 @@
+use bevy::math::Vec3;
 use bevy::math::bounding::{Aabb3d, BoundingVolume};
 use bevy::prelude::*;
-use bevy::math::{Vec3};
 
 #[derive(Debug)]
 pub struct QuadNode {
@@ -12,14 +12,13 @@ pub struct QuadNode {
 
 impl QuadNode {
     fn new(min: Vec3, max: Vec3) -> Self {
-
         let bounds = Aabb3d {
             min: min.into(),
-             max: max.into(),
+            max: max.into(),
         };
-        let center = bounds.center().xz();        
+        let center = bounds.center().xz();
         let size = (bounds.max - bounds.min).xz(); // Size is the full width and depth of the node
-        
+
         Self {
             bounds,
             children: Vec::new(),
@@ -28,12 +27,13 @@ impl QuadNode {
         }
     }
 
+    /// Resursively rebuild the quadtree nodes based on the camera position
     pub fn build(&mut self, pos: Vec2, min_node_size: f32) {
         let dist_to_cam = self.center.distance(pos);
-        if dist_to_cam < self.size.x && self.size.x > min_node_size {            
-            self.children = self.create_children();                    
-            for child in &mut self.children {                
-                child.build(pos, min_node_size);                
+        if dist_to_cam < self.size.x && self.size.x > min_node_size {
+            self.children = self.create_children();
+            for child in &mut self.children {
+                child.build(pos, min_node_size);
             }
         }
     }
@@ -64,20 +64,20 @@ impl QuadNode {
 #[derive(Component, Debug)]
 pub struct QuadTree {
     pub bounds: Aabb3d,
-    pub min_node_size: f32,    
+    pub min_node_size: f32,
     pub root: QuadNode,
 }
 
 impl Default for QuadTree {
     fn default() -> Self {
-        let min = Vec3::new(-32000.0, 0.0, -32000.0);
-        let max = Vec3::new(32000.0, 0.0, 32000.0);   
+        let v = 2_000.0;
+        let min = Vec3::new(-v, 0.0, -v);
+        let max = Vec3::new(v, 0.0, v);
         Self::new(min, max)
     }
 }
 
 impl QuadTree {
-
     pub fn new(min: Vec3, max: Vec3) -> Self {
         Self {
             min_node_size: 500.0,
@@ -86,7 +86,7 @@ impl QuadTree {
                 min: min.into(),
                 max: max.into(),
             },
-        }   
+        }
     }
 
     pub fn get_children(&self) -> Vec<&QuadNode> {
@@ -96,7 +96,8 @@ impl QuadTree {
     }
 
     pub fn build(&mut self, camera_pos: Vec2) {
-        self.root = QuadNode::new(self.root.bounds.min.into(), self.root.bounds.max.into());
+        // TODO: stop rebuilding the entire tree every frame
+        self.root = QuadNode::new(self.bounds.min.into(), self.bounds.max.into());
         self.root.build(camera_pos, self.min_node_size);
     }
 
@@ -109,8 +110,4 @@ impl QuadTree {
             }
         }
     }
-
-
-
-    
 }
