@@ -30,7 +30,9 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     // Start loading the texture.
     commands.insert_resource(LoadingTexture {
         is_loaded: false,
-        handle: asset_server.load("textures/array_texture.png"),
+        //handle: asset_server.load("textures/array_texture.png"),  
+        handle: asset_server.load("textures/base_color.ktx2"), 
+        
     });
 
     // light
@@ -50,7 +52,7 @@ fn create_array_texture(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     mut loading_texture: ResMut<LoadingTexture>,
-    mut images: ResMut<Assets<Image>>,
+    //mut images: ResMut<Assets<Image>>,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<ArrayTextureMaterial>>,
 ) {
@@ -62,11 +64,11 @@ fn create_array_texture(
         return;
     }
     loading_texture.is_loaded = true;
-    let image = images.get_mut(&loading_texture.handle).unwrap();
-
+    
+    //let image = images.get_mut(&loading_texture.handle).unwrap();
     // Create a new array texture asset from the loaded texture.
-    let array_layers = 4;
-    image.reinterpret_stacked_2d_as_array(array_layers);
+    //let array_layers = 4;
+    //image.reinterpret_stacked_2d_as_array(array_layers);
 
     // Spawn some cubes using the array texture
     let mesh_handle = meshes.add(Cuboid::default());
