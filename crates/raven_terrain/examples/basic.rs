@@ -31,10 +31,10 @@ fn main() -> AppExit {
         .init_state::<MyStates>()
         .add_loading_state(
             LoadingState::new(MyStates::AssetLoading)
-                .continue_to_state(MyStates::Next)
+                .continue_to_state(MyStates::AssetProcessing)
                 .load_collection::<TerrainAssets>(),
         )
-        .add_systems(OnExit(MyStates::AssetProcessing), fix_assets)
+        .add_systems(OnEnter(MyStates::AssetProcessing), fix_assets)
         .add_systems(Startup, setup)
         .add_systems(OnEnter(MyStates::Next), setup_with_assets)
         .insert_resource(DirectionalLightShadowMap { size: 4096 })
@@ -51,14 +51,38 @@ enum MyStates {
 
 #[derive(AssetCollection, Resource)]
 struct TerrainAssets {
-    #[asset(path = "textures/array_texture.png")]
+
+    // // basis-universal
+    // #[asset(path = "array_material/albedo.basis")]
+    // base_color: Handle<Image>,
+    // #[asset(path = "array_material/ao.basis")]
+    // occlusion: Handle<Image>,
+    // #[asset(path = "array_material/normal.basis")]
+    // normal_map: Handle<Image>,
+    // #[asset(path = "array_material/metal_rough.basis")]
+    // metal_rough: Handle<Image>,
+
+
+    // ktx2
+    #[asset(path = "array_material/albedo.ktx2")]
     base_color: Handle<Image>,
-    #[asset(path = "textures/array_texture.png")]
+    #[asset(path = "array_material/ao.ktx2")]
     occlusion: Handle<Image>,
-    #[asset(path = "textures/array_texture.png")]
+    #[asset(path = "array_material/normal.ktx2")]
     normal_map: Handle<Image>,
-    #[asset(path = "textures/array_texture.png")]
+    #[asset(path = "array_material/metal_rough.ktx2")]
     metal_rough: Handle<Image>,
+
+
+    // png
+    // #[asset(path = "textures/array_texture.png")]
+    // base_color: Handle<Image>,
+    // #[asset(path = "textures/array_texture.png")]
+    // occlusion: Handle<Image>,
+    // #[asset(path = "textures/array_texture.png")]
+    // normal_map: Handle<Image>,
+    // #[asset(path = "textures/array_texture.png")]
+    // metal_rough: Handle<Image>,
 }
 
 fn fix_assets(
@@ -66,11 +90,22 @@ fn fix_assets(
     mut images: ResMut<Assets<Image>>,
     mut app_state: ResMut<NextState<MyStates>>,
 ) {    
-    let image = images.get_mut(&handles.base_color).unwrap();
+    
+    for handle in [
+        &handles.base_color,
+        // &handles.occlusion,
+        // &handles.normal_map,
+        // &handles.metal_rough,
+    ] {
+        let image = images.get_mut(handle).unwrap();
 
-    // Create a new array texture asset from the loaded texture.
-    let array_layers = 4;
-    image.reinterpret_stacked_2d_as_array(array_layers);
+        // Create a new array texture asset from the loaded texture.
+        // let array_layers = 4;
+        // image.reinterpret_stacked_2d_as_array(array_layers);
+    }
+    
+
+
 
     app_state.set(MyStates::Next);
 }

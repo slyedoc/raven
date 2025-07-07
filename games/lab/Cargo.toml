@@ -5,5 +5,8 @@ edition = "2021"
 
 [dependencies]
 bevy = "0.16"
+bevy_mod_mipmap_generator = { git = "https://github.com/DGriffin91/bevy_mod_mipmap_generator", branch = "main" }
 bevy_simple_subsecond_system = "0.2"
 raven_util = { path = "../../crates/raven_util" }
+raven_editor = { path = "../../crates/raven_editor" }
+bevy_asset_loader = "0.23"

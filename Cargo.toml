@@ -2,12 +2,11 @@
 
 [workspace]
 resolver = "2"
-members = ["games/*", "crates/*"]
+members = ["games/*", "crates/*", "tools/*"]
 
 [workspace.package]
 edition = "2024"
 version = "0.1.0"
-
 
 
 # Enable only a small amount of optimization in debug mode

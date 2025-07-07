@@ -8,6 +8,7 @@ This is a Rust workspace containing multiple Bevy engine crates and games. The p
 
 - `crates/` - Core library crates
 - `games/` - Game applications
+- `tools/` - Development utilities and helper tools
 - Uses Bevy 0.16 throughout
 
 ## Key Crates
@@ -25,6 +26,10 @@ This is a Rust workspace containing multiple Bevy engine crates and games. The p
 - **tic-tac-toe**: Simple tic-tac-toe game
 - **lab**: Experimental sandbox environment for testing features
 
+### Tools
+- **depth_gen**: Converts displacement images (white at highest) to depth maps (black at highest)
+- **png_interlace**: Converts interlaced PNG files to non-interlaced format
+
 ## Common Commands
 
 ### Build and Run
@@ -41,6 +46,10 @@ cargo run --example agent --package raven_nav --features="debug_draw"
 
 # Run with optimizations (better performance)
 cargo run --release --bin rts
+
+# Run tools
+cargo run -p depth_gen -- input.png output.png
+cargo run -p png_interlace -- input.png output.png
 ```
 
 ### Testing

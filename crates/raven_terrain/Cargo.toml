@@ -22,6 +22,7 @@ bytemuck = "1.23"
 bevy_rand = { version = "0.11", features = ["wasm_js"] }
 
 [dev-dependencies]
+bevy = { version = "0.16", features = ["basis-universal"] }
 raven_editor = { path = "../../crates/raven_editor", features = ["avian3d"] }
 bevy_asset_loader = "0.23"
 
