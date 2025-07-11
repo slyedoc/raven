@@ -1,0 +1,39 @@
+[package]
+name = "raven_splat"
+version = "0.1.0"
+edition = "2021"
+
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+thiserror = "1"
+
+[dependencies.bevy]
+version = "0.16"
+default-features = false
+features = [
+    "bevy_asset",
+    "bevy_core_pipeline",
+    "bevy_pbr",
+    "bevy_render",
+    # "basis-universal",
+    # "ktx2",
+    "tonemapping_luts",
+    "zstd",
+]
+
+[dev-dependencies]
+bevy = { version = "0.16", features = ["file_watcher"] }
+raven_util = { path = "../../crates/raven_util" }
+raven_editor = { path = "../../crates/raven_editor", features = [] }
+bevy_asset_loader = { version = "0.23", features = ["2d"] }
+
+#[[example]]
+#name = "triplanar"
+# wasm: --features="bevy/webgl2,bevy/bevy_winit"
+# non-wasm: --features="bevy/basis-universal"
+# unix: --features="bevy/x11"
+
+[lints.rust]
+  dead_code = "allow" # sick of the ShaderType warnings

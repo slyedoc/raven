@@ -8,14 +8,15 @@
 #import bevy_render::maths::powsafe;
 
 #ifdef SCREEN_SPACE_AMBIENT_OCCLUSION
-#import bevy_pbr::gtao_utils::gtao_multibounce
+#import bevy_pbr::mesh_view_bindings::screen_space_ambient_occlusion_texture
+#import bevy_pbr::ssao_utils::ssao_multibounce
 #endif
 
 #import bevy_pbr::mesh_functions as mesh_functions
 #import bevy_pbr::view_transformations as view_transformations
 
-#import trimap::biplanar::{calculate_biplanar_mapping, biplanar_texture_splatted}
-#import trimap::triplanar::{calculate_triplanar_mapping, triplanar_normal_to_world_splatted}
+#import raven_splat::biplanar::{calculate_biplanar_mapping, biplanar_texture_splatted}
+#import raven_splat::triplanar::{calculate_triplanar_mapping, triplanar_normal_to_world_splatted}
 
 struct VertexOutput {
     @builtin(position) clip_position: vec4<f32>,
@@ -30,7 +31,7 @@ struct TriplanarMaterial {
     emissive: vec4<f32>,
     perceptual_roughness: f32,
     metallic: f32,
-    reflectance: f32,
+    reflectance: f32, // changed from f32 with 0.16
     flags: u32,
     alpha_cutoff: f32,
     uv_scale: f32,
@@ -82,22 +83,21 @@ fn fragment(
     in: VertexOutput,
     @builtin(front_facing) is_front: bool,
 ) -> @location(0) vec4<f32> {
-    var output_color: vec4<f32> = material.base_color;
-    return [0.0, 0.0, 0.0, 1.0]; // Default color for debugging
+    var output_color: vec4<f32> = material.base_color;   
 
-    let is_orthographic = view.clip_from_view[3].w == 1.0;
-    let V = pbr_functions::calculate_view(in.world_position, is_orthographic);
+     let is_orthographic = view.clip_from_view[3].w == 1.0;
+     let V = pbr_functions::calculate_view(in.world_position, is_orthographic);
 
-    var bimap = calculate_biplanar_mapping(in.world_position.xyz, in.world_normal, 8.0);
-    bimap.ma_uv *= material.uv_scale;
-    bimap.me_uv *= material.uv_scale;
-    // Triplanar is only used for normal mapping because the transitions between
-    // planar projections look significantly better when there is high contrast
-    // in lighting direction.
-    var trimap = calculate_triplanar_mapping(in.world_position.xyz, in.world_normal, 8.0);
-    trimap.uv_x *= material.uv_scale;
-    trimap.uv_y *= material.uv_scale;
-    trimap.uv_z *= material.uv_scale;
+     var bimap = calculate_biplanar_mapping(in.world_position.xyz, in.world_normal, 8.0);
+     bimap.ma_uv *= material.uv_scale;
+     bimap.me_uv *= material.uv_scale;
+     // Triplanar is only used for normal mapping because the transitions between
+     // planar projections look significantly better when there is high contrast
+     // in lighting direction.
+     var trimap = calculate_triplanar_mapping(in.world_position.xyz, in.world_normal, 8.0);
+     trimap.uv_x *= material.uv_scale;
+     trimap.uv_y *= material.uv_scale;
+     trimap.uv_z *= material.uv_scale;
 
     if ((material.flags & pbr_types::STANDARD_MATERIAL_FLAGS_BASE_COLOR_TEXTURE_BIT) != 0u) {
         output_color *= biplanar_texture_splatted(
@@ -110,12 +110,15 @@ fn fragment(
 
     // NOTE: Unlit bit not set means == 0 is true, so the true case is if lit
     if ((material.flags & pbr_types::STANDARD_MATERIAL_FLAGS_UNLIT_BIT) == 0u) {
+        
         // Prepare a 'processed' StandardMaterial by sampling all textures to resolve
         // the material members
         var pbr_input: pbr_types::PbrInput;
 
         pbr_input.material.base_color = output_color;
-        pbr_input.material.reflectance = material.reflectance;
+        //reflectance: vec3<f32>,
+        pbr_input.material.reflectance = vec3(material.reflectance);
+        
         pbr_input.material.flags = material.flags;
         pbr_input.material.alpha_cutoff = material.alpha_cutoff;
 
@@ -128,7 +131,7 @@ fn fragment(
                 in.material_weights,
                 bimap
             ).rgb;
-            emissive = vec4<f32>(emissive.rgb * biplanar_emissive, 1.0);
+                emissive = vec4<f32>(emissive.rgb * biplanar_emissive, 1.0);
         }
         pbr_input.material.emissive = emissive;
 
@@ -158,9 +161,11 @@ fn fragment(
                 bimap
             ).r);
         }
+
 #ifdef SCREEN_SPACE_AMBIENT_OCCLUSION
         let ssao = textureLoad(screen_space_ambient_occlusion_texture, vec2<i32>(in.clip_position.xy), 0i).r;
-        let ssao_multibounce = gtao_multibounce(ssao, pbr_input.material.base_color.rgb);
+        let ssao_multibounce = ssao_multibounce(ssao, pbr_input.material.base_color.rgb);
+        //let ssao_multibounce = gtao_multibounce(ssao, pbr_input.material.base_color.rgb);
         occlusion = min(occlusion, ssao_multibounce);
 #endif
         pbr_input.diffuse_occlusion = occlusion;
@@ -175,7 +180,6 @@ fn fragment(
         );
 
         pbr_input.is_orthographic = is_orthographic;
-
 
         pbr_input.N = triplanar_normal_to_world_splatted(
             (material.flags & pbr_types::STANDARD_MATERIAL_FLAGS_TWO_COMPONENT_NORMAL_MAP) != 0u,
@@ -193,30 +197,40 @@ fn fragment(
         pbr_input.flags = mesh[in.instance_index].flags;
 
         output_color = pbr_functions::apply_pbr_lighting(pbr_input);
-    } else {
+    } else {             
         output_color = alpha_discard_copy_paste(material, output_color);
     }
 
-    // fog
-    if (fog.mode != FOG_MODE_OFF && (material.flags & pbr_types::STANDARD_MATERIAL_FLAGS_FOG_ENABLED_BIT) != 0u) {
-        output_color = pbr_functions::apply_fog(fog, output_color, in.world_position.xyz, view.world_position.xyz);
-    }
+    //pbr_functions::main_pass_post_lighting_processing(pbr_input, output_color);
 
-#ifdef TONEMAP_IN_SHADER
-    output_color = tone_mapping(output_color, view.color_grading);
-#ifdef DEBAND_DITHER
-    var output_rgb = output_color.rgb;
-    output_rgb = powsafe(output_rgb, 1.0 / 2.2);
-    output_rgb = output_rgb + screen_space_dither(in.clip_position.xy);
-    // This conversion back to linear space is required because our output texture format is
-    // SRGB; the GPU will assume our output is linear and will apply an SRGB conversion.
-    output_rgb = powsafe(output_rgb, 2.2);
-    output_color = vec4(output_rgb, output_color.a);
-#endif
-#endif
-#ifdef PREMULTIPLY_ALPHA
-    output_color = pbr_functions::premultiply_alpha(material.flags, output_color);
-#endif
+    // main_pass_post_lighting_processing 0.15
+    // fog
+    // if (fog.mode != FOG_MODE_OFF && (material.flags & pbr_types::STANDARD_MATERIAL_FLAGS_FOG_ENABLED_BIT) != 0u) {
+    //     output_color = pbr_functions::apply_fog(fog, output_color, in.world_position.xyz, view.world_position.xyz);
+    // }
+
+    #ifdef TONEMAP_IN_SHADER
+         output_color = tone_mapping(output_color, view.color_grading);
+    #ifdef DEBAND_DITHER
+         var output_rgb = output_color.rgb;
+         output_rgb = powsafe(output_rgb, 1.0 / 2.2);
+         output_rgb = output_rgb + screen_space_dither(in.clip_position.xy);
+         // This conversion back to linear space is required because our output texture format is
+         // SRGB; the GPU will assume our output is linear and will apply an SRGB conversion.
+         output_rgb = powsafe(output_rgb, 2.2);
+         output_color = vec4(output_rgb, output_color.a);
+    #endif
+    #endif
+    #ifdef PREMULTIPLY_ALPHA
+        output_color = pbr_functions::premultiply_alpha(material.flags, output_color);
+    #endif
+    
     return output_color;
+    
 }
+
+
+
+
+
 

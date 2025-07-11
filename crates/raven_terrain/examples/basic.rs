@@ -1,14 +1,15 @@
 use avian3d::prelude::*;
 use bevy::{
-    core_pipeline::bloom::Bloom, ecs::identifier::error, image::{
-        ImageAddressMode, ImageFilterMode, ImageLoaderSettings, ImageSampler,
-        ImageSamplerDescriptor,
-    }, pbr::{light_consts::lux, Atmosphere, CascadeShadowConfigBuilder, DirectionalLightShadowMap}, prelude::*, render::camera::Exposure
+    core_pipeline::bloom::Bloom, log::{Level, LogPlugin}, pbr::{light_consts::lux, Atmosphere, CascadeShadowConfigBuilder, DirectionalLightShadowMap}, prelude::*, render::{
+        camera::Exposure,
+        render_resource::{AsBindGroup, ShaderRef},
+    }
 };
 use bevy_asset_loader::prelude::*;
 use raven_editor::prelude::*;
 use raven_terrain::prelude::*;
 use raven_util::prelude::*;
+use raven_splat::prelude::*;
 
 fn main() -> AppExit {
     App::new()
@@ -21,12 +22,19 @@ fn main() -> AppExit {
                     ..default()
                 }),
                 ..default()
+            })
+            .set(LogPlugin {
+                level: Level::WARN,              
+                //filter: "".into(),
+                ..default()
             }),
             TerrainPlugin,
+            TriplanarMaterialPlugin,
             //WaterPlugin,
             PhysicsPlugins::default(),
             EditorPlugin::default(),
             CameraFreePlugin,
+            MaterialPlugin::<ArrayTextureMaterial>::default(),
         ))
         .init_state::<MyStates>()
         .add_loading_state(
@@ -49,63 +57,62 @@ enum MyStates {
     Next,
 }
 
+// See ./tools/convert_textures.sh for how to generate these textures
 #[derive(AssetCollection, Resource)]
-struct TerrainAssets {
-
-    // // basis-universal
-    // #[asset(path = "array_material/albedo.basis")]
-    // base_color: Handle<Image>,
-    // #[asset(path = "array_material/ao.basis")]
-    // occlusion: Handle<Image>,
-    // #[asset(path = "array_material/normal.basis")]
-    // normal_map: Handle<Image>,
-    // #[asset(path = "array_material/metal_rough.basis")]
-    // metal_rough: Handle<Image>,
-
-
-    // ktx2
-    #[asset(path = "array_material/albedo.ktx2")]
+struct TerrainAssets {    
+    #[asset(path = "textures/base_color.ktx2")]
+    #[asset(image(sampler(filter = linear, wrap = repeat)))]
     base_color: Handle<Image>,
-    #[asset(path = "array_material/ao.ktx2")]
+    
+    #[asset(path = "textures/occlusion.ktx2")]
+    #[asset(image(sampler(filter = linear, wrap = repeat)))]
     occlusion: Handle<Image>,
-    #[asset(path = "array_material/normal.ktx2")]
+
+    #[asset(path = "textures/normal.ktx2")]
+    #[asset(image(sampler(filter = linear, wrap = repeat)))]
     normal_map: Handle<Image>,
-    #[asset(path = "array_material/metal_rough.ktx2")]
-    metal_rough: Handle<Image>,
+
+    #[asset(path = "textures/metal_rough.ktx2")]
+    #[asset(image(sampler(filter = linear, wrap = repeat)))]
+    metal_rough: Handle<Image>,    
+}
 
 
-    // png
-    // #[asset(path = "textures/array_texture.png")]
-    // base_color: Handle<Image>,
-    // #[asset(path = "textures/array_texture.png")]
-    // occlusion: Handle<Image>,
-    // #[asset(path = "textures/array_texture.png")]
-    // normal_map: Handle<Image>,
-    // #[asset(path = "textures/array_texture.png")]
-    // metal_rough: Handle<Image>,
+
+#[derive(Asset, TypePath, AsBindGroup, Debug, Clone)]
+struct ArrayTextureMaterial {
+    #[texture(0, dimension = "2d_array")]
+    #[sampler(1)]
+    array_texture: Handle<Image>,
+}
+
+/// This example uses a shader source file from the assets subdirectory
+const SHADER_ASSET_PATH: &str = "shaders/array_texture.wgsl";
+
+impl Material for ArrayTextureMaterial {
+    fn fragment_shader() -> ShaderRef {
+        SHADER_ASSET_PATH.into()
+    }
 }
 
 fn fix_assets(
-    handles: Res<TerrainAssets>,
-    mut images: ResMut<Assets<Image>>,
+    // handles: Res<TerrainAssets>,
+    // mut images: ResMut<Assets<Image>>,
     mut app_state: ResMut<NextState<MyStates>>,
-) {    
-    
-    for handle in [
-        &handles.base_color,
-        // &handles.occlusion,
-        // &handles.normal_map,
-        // &handles.metal_rough,
-    ] {
-        let image = images.get_mut(handle).unwrap();
+) {
+    error!("Fixing assets...");
+    // for handle in [
+    //     &handles.base_color,
+    //     // &handles.occlusion,
+    //     // &handles.normal_map,
+    //     // &handles.metal_rough,
+    // ] {
+    //     let image = images.get_mut(handle).unwrap();
 
-        // Create a new array texture asset from the loaded texture.
-        // let array_layers = 4;
-        // image.reinterpret_stacked_2d_as_array(array_layers);
-    }
-    
-
-
+    //     // Create a new array texture asset from the loaded texture.
+    //     // let array_layers = 4;
+    //     // image.reinterpret_stacked_2d_as_array(array_layers);
+    // }
 
     app_state.set(MyStates::Next);
 }
@@ -127,13 +134,11 @@ fn fix_assets(
 
 fn setup_with_assets(
     mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,    
+    mut meshes: ResMut<Assets<Mesh>>,
     handles: Res<TerrainAssets>,
     mut tri_materials: ResMut<Assets<TriplanarMaterial>>,
-    
-) {    
-
-    
+    mut materials: ResMut<Assets<ArrayTextureMaterial>>,
+) {
     let mut sphere_mesh = Mesh::try_from(Sphere::new(5.0).mesh().ico(6).unwrap()).unwrap();
 
     let material_weights: Vec<u32> = sphere_mesh
@@ -156,10 +161,12 @@ fn setup_with_assets(
     commands.spawn((
         Name::new("Triplane Sphere"),
         Mesh3d(meshes.add(sphere_mesh)),
+        //  MeshMaterial3d(materials.add(ArrayTextureMaterial {
+        //         array_texture: handles.base_color.clone(),
+        //     })),
         MeshMaterial3d(tri_materials.add(TriplanarMaterial {
-            metallic: 0.05,
-            perceptual_roughness: 0.9,
-
+            metallic: 1.0,
+            perceptual_roughness: 1.0,
             base_color_texture: Some(handles.base_color.clone()),
             emissive_texture: None,
             metallic_roughness_texture: Some(handles.metal_rough.clone()),
@@ -183,7 +190,7 @@ fn setup(
             hdr: true,
             ..default()
         },
-        Transform::from_xyz(0., 200.0, -300.),
+        Transform::from_xyz(0., 20.0, -30.).looking_at(Vec3::ZERO, Vec3::Y),
         Msaa::Off,
         Atmosphere::EARTH,
         Exposure::SUNLIGHT,
@@ -240,7 +247,7 @@ fn setup(
 
     commands.spawn((
         Name::new("Terrain Gen"),
-        TerrainGenerator { ..default() },
+        TerrainGenerator::default(),
         Transform::from_xyz(0.0, -150.0, 0.0),
     ));
 

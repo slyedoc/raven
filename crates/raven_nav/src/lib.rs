@@ -361,8 +361,7 @@ fn start_tile_build_tasks(
             let (affectors, tile_transform) = tile_query.get_mut(*tile_enity).unwrap();
 
             // if tile has no affectors, remove it
-            if affectors.is_empty() {
-                // Spawn task to remove its nav mesh
+            if affectors.is_empty() {                
                 commands.entity(*tile_enity).remove::<TileNavMesh>();
                 continue;
             }

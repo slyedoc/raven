@@ -1,7 +1,6 @@
 #![allow(unused_imports)]
 mod debug;
 mod quadtree;
-mod triplaner;
 //mod water;
 
 
@@ -19,12 +18,12 @@ use bevy::{
 };
 use bevy_inspector_egui::{inspector_options::std_options::NumberDisplay, prelude::*};
 use bevy_rand::prelude::*;
+use raven_splat::prelude::*;
 use noisy_bevy::*;
 use raven_util::prelude::*;
 
 pub mod prelude {
     pub use crate::{
-        triplaner::*,
         TerrainChunk,
         TerrainGenerator,
         TerrainPlugin,
@@ -34,8 +33,6 @@ pub mod prelude {
 }
 
 use quadtree::QuadTree;
-
-use crate::triplaner::TriplanarMaterialPlugin;
 
 pub struct TerrainPlugin;
 
@@ -63,6 +60,7 @@ impl Plugin for TerrainPlugin {
     }
 }
 
+// TODO: remove this completely, and just store entity in left nodes
 #[derive(Clone)]
 pub struct TmpNode {
     position: Vec2,
@@ -254,7 +252,7 @@ fn build_terrain_chunk(
         };
 
         // scale everything to 0.0..1.0
-        // TODO: make reusable
+        // TODO: reuse mesh, image, and heightfields, to avoid alloc, should all be same size
         let res = generator.chunk_resolution as usize;
         let mut heightfield = vec![vec![0.0; res]; res];
         for x in 0..res {

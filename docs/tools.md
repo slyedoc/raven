@@ -1,41 +1,36 @@
 # Tools
 
+Tools with install command
 
+- [wgsl-analyzer](https://github.com/wgsl-analyzer/wgsl-analyzer) - lsp for shaders
 
-## Images
+    ```bash
+    cargo install --git https://github.com/wgsl-analyzer/wgsl-analyzer.git wgsl-analyzer
+    ```
 
-Lastest bevy related info: 
-
-[bevy issue 14671](https://github.com/bevyengine/bevy/issues/14671) 
-
-
-I have used basicu and little [nvtt](https://developer.nvidia.com/gpu-accelerated-texture-compression), but had most luck with ktx
-
-
-### KTX-Software
-
-For image processing - [KTX Release](https://github.com/KhronosGroup/KTX-Software/releases)
-
-```bash
-sudo apt install ktx-software
 ```
+    cargo install --git https://github.com/wgsl-analyzer/wgsl-analyzer wgslfmt
+    ```
 
-Creating skybox textures:
+- [mdbook](https://rust-lang.github.io/mdBook/guide/installation.html)
+    ```bash
+    cargo install mdbook
+    ```
 
-```bash
-ktx create --format R8G8B8A8_UNORM --cubemap right.png left.png top.png bot.png front.png back.png skybox.ktx2
-```
+- [ktx](https://github.com/KhronosGroup/KTX-Software/releases) -image processing,  see [ktx.md](ktx.md)
+  
+    ```bash
+    sudo apt install ktx-software
+    ```
 
-Create mipmaps
+- [sd](https://github.com/chmln/sd)  - rust sed
 
-```bash
-ktx create test.png test.ktx2 --format R8G8B8A8_SRGB --generate-mipmap
-```
+    ```bash
+    cargo install sd
+    ```
 
-convert "$file" -depth 8 "${file%.png}_8bit.png"
+- [rg](https://github.com/BurntSushi/ripgrep?tab=readme-ov-file#installation) - rust grep 
 
-Create texture array
-
-R8G8B8A8_SRGB
-
-ktx create --format R8G8B8A8_SRGB --layers 4 $(find ./crates/raven_terrain/assets/textures -name "*_diff_4k.png" | sort) base_color.ktx2
+    ```bash
+    apt install ripgrep
+    ```

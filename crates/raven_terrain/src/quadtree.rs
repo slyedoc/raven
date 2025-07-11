@@ -70,7 +70,7 @@ pub struct QuadTree {
 
 impl Default for QuadTree {
     fn default() -> Self {
-        let v = 2_000.0;
+        let v = 32_000.0; // defaultings to 32km x 32km, (20 miles, 20miles)
         let min = Vec3::new(-v, 0.0, -v);
         let max = Vec3::new(v, 0.0, v);
         Self::new(min, max)

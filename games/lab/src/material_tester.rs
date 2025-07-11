@@ -16,10 +16,12 @@ pub struct CoastSandRock02 {
     pub occlusion: Handle<Image>,
     #[asset(path = "coast_sand_rocks_02/coast_sand_rocks_02_nor_gl_4k.png")]
     pub normal: Handle<Image>,
+    // #[asset(path = "coast_sand_rocks_02/coast_sand_rocks_02_arm_4k.png")]
+    // pub arm: Handle<Image>,
     #[asset(path = "coast_sand_rocks_02/coast_sand_rocks_02_arm_4k.png")]
-    pub metal_rough: Handle<Image>,
-    #[asset(path = "coast_sand_rocks_02/coast_sand_rocks_02_rough_4k.png")]
-    pub rough: Handle<Image>,
+    pub metal_rough: Handle<Image>,    
+    // #[asset(path = "coast_sand_rocks_02/coast_sand_rocks_02_rough_4k.png")]
+    // pub rough: Handle<Image>,
     #[asset(path = "coast_sand_rocks_02/coast_sand_rocks_02_depth_4k.png")]
     pub depth_map: Handle<Image>,
 }
@@ -38,8 +40,8 @@ impl Plugin for MaterialTesterPlugin {
                 switch_method.run_if(input_just_pressed(KeyCode::KeyG)),
                 toggle_occlusion_texture.run_if(input_just_pressed(KeyCode::KeyH)),
                 toggle_metal.run_if(input_just_pressed(KeyCode::KeyJ)),
-                toggle_diff_metals.run_if(input_just_pressed(KeyCode::KeyK)),                
-                toggle_rough_images.run_if(input_just_pressed(KeyCode::KeyL)),
+
+                
             ),
         );
     }
@@ -75,11 +77,12 @@ fn setup(mut commands: Commands) {
                 "1/2 - Decrease/Increase parallax depth scale\n",
             ));
             p.spawn(TextSpan::new("3/4 - Decrease/Increase layer count\n"));            
-            p.spawn(TextSpan::new("F - Switch parallax method\n"));
-            p.spawn(TextSpan::new("O - Toggle occlusion texture\n"));
-            p.spawn(TextSpan::new("M - Toggle metal texture\n"));
-            p.spawn(TextSpan::new("I - Toggle metal image\n"));            
-            p.spawn(TextSpan::new("R - Toggle rough images\n"));
+            p.spawn(TextSpan::new("F - Toggle parallax depth map\n"));
+            p.spawn(TextSpan::new("G - Switch parallax method\n"));
+            p.spawn(TextSpan::new("H - Toggle occlusion texture\n"));
+            p.spawn(TextSpan::new("J - Toggle metallic and roughness texture\n"));                        
+
+            
         });
 }
 
@@ -122,32 +125,6 @@ pub fn toggle_metal(
 }
 
 #[allow(dead_code)]
-pub fn toggle_diff_metals(
-    handles: Res<CoastSandRock02>,
-    toggle_thing: Res<MaterialTester>,
-    mut materials: ResMut<Assets<StandardMaterial>>,
-    mut local: Local<bool>,
-) {
-    let mat = materials.get_mut(&toggle_thing.0).unwrap();
-
-    match *local {
-        true => {
-            mat.metallic_roughness_texture = Some(handles.metal_rough.clone());
-            mat.metallic = 1.0;
-            mat.perceptual_roughness = 1.0;
-            info!("Material: metal_rough texture");
-        }
-        false => {
-            mat.metallic = 1.0; // set so metallic_roughness_texture is used
-            mat.perceptual_roughness = 1.0; // set so metallic_
-            mat.metallic_roughness_texture = Some(handles.rough.clone());
-            info!("Material: rough texture enabled");
-        }
-    }
-    *local = !*local;
-}
-
-#[allow(dead_code)]
 pub fn toggle_parallax(
     handles: Res<CoastSandRock02>,
     toggle_thing: Res<MaterialTester>,
@@ -162,32 +139,6 @@ pub fn toggle_parallax(
         mat.depth_map = Some(handles.depth_map.clone());
         info!("Material: Parallax depth map enabled");
     }
-}
-
-#[allow(dead_code)]
-pub fn toggle_rough_images(
-    handles: Res<CoastSandRock02>,
-    toggle_thing: Res<MaterialTester>,
-    mut materials: ResMut<Assets<StandardMaterial>>,
-    mut local: Local<bool>,
-) {
-    let mat = materials.get_mut(&toggle_thing.0).unwrap();
-
-    match *local {
-        true => {
-            mat.metallic_roughness_texture = Some(handles.metal_rough.clone());
-            mat.metallic = 1.0;
-            mat.perceptual_roughness = 1.0;
-            info!("Material: metal_rough texture");
-        }
-        false => {
-            mat.metallic = 1.0; // set so metallic_roughness_texture is used
-            mat.perceptual_roughness = 1.0; // set so metallic_
-            mat.metallic_roughness_texture = Some(handles.rough.clone());
-            info!("Material: rough texture enabled");
-        }
-    }
-    *local = !*local;
 }
 
 const DEPTH_CHANGE_RATE: f32 = 0.1;
