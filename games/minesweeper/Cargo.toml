@@ -14,14 +14,16 @@ bevy-inspector-egui = { version = "0.31", features = [
     "bevy_pbr",
     "highlight_changes",
 ] }
-bevy_tweening = { git = "https://github.com/slyedoc/bevy_tweening.git", branch = "bevy_0.16" }
-bevy_rand = { git = "https://github.com/slyedoc/bevy_rand.git", branch = "bevy_0.16", features = ["rand_chacha", "wyrand"] }
+bevy_tweening = "0.13"
+bevy_rand = { version = "0.11", features = ["rand_chacha", "wyrand"] }
 rand_core = "0.9"
 rand = "0.9"
+bevy_asset_loader = "0.23"
 
 # optional dependencies
+raven_util = { path = "../../crates/raven_util" }
 raven_editor = { path = "../../crates/raven_editor", optional = true }
-clap = { version = "4.0", features = ["derive"], optional = true}
+clap = { version = "4.0", features = ["derive"], optional = true }
 bevy_spawn_observer = "0.1.0"
 cfg-if = "1.0"
 #bevy_ui_text_input = "0.3.0"

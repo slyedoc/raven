@@ -13,6 +13,7 @@ use bevy_inspector_egui::{egui::TextStyle, prelude::*};
 use bevy_rand::prelude::*;
 use bevy_spawn_observer::SpawnObserver;
 use rand::prelude::*;
+use raven_util::prelude::*;
 
 pub struct GamePlugin;
 
@@ -50,19 +51,10 @@ pub enum GamePhase {
 }
 
 fn setup(mut commands: Commands) {
-    commands.spawn((
-        Name::new("UI"),
+    commands.spawn((        
         StateScoped(InGame),
         MainUI,
-        Node {
-            width: Val::Percent(100.),
-            height: Val::Percent(100.),
-            padding: UiRect::all(Val::Px(20.0)),
-            flex_direction: FlexDirection::Column,
-            justify_content: JustifyContent::Center,
-            align_items: AlignItems::Center,
-            ..default()
-        },
+        ui_root("Main UI"),
         children![(
             // first row
             Name::new("Options"),

@@ -1,19 +1,22 @@
 #![allow(unused_imports)]
 pub mod game;
 pub mod menu;
-pub mod splash;
+pub mod loading;
 pub mod ui;
-pub mod utils;
 
 use bevy::{prelude::*, window::PresentMode};
 use bevy_inspector_egui::prelude::*;
+use bevy_asset_loader::prelude::*;
 use bevy_rand::prelude::*;
 use bevy_tweening::TweeningPlugin;
+use raven_util::prelude::*;
 use cfg_if::cfg_if;
 use ui::*;
 
 #[cfg(feature = "dev")] use raven_editor::prelude::*;
 #[cfg(feature = "dev")] use clap::Parser;
+
+use crate::game::GamePhase;
 
 #[cfg(feature = "dev")]
 #[derive(Parser, Debug)]
@@ -23,6 +26,16 @@ struct Args {
     #[clap(short, long)]
     seed: Option<u8>,
 }
+
+#[derive(Default, States, Debug, Clone, Eq, PartialEq, Hash, Reflect)]
+pub enum AppState {
+    #[default]
+    Loading,
+    LoadingComplete,
+    Menu,
+    Game,
+}
+
 
 fn main() {
     let mut app = App::new();
@@ -35,25 +48,31 @@ fn main() {
             }),
             ..default()
         }),
-        ui::UiPlugin,
-        TweeningPlugin,
+        TweeningPlugin,        
+        FadePlugin::<AppState>::default(),
+        FadePlugin::<GamePhase>::default(),   
         // states
-        splash::SplashPlugin,
+        loading::SplashPlugin,
         menu::MenuPlugin,
         game::GamePlugin,
-    ));
+    ))
+        .add_loading_state(
+            LoadingState::new(AppState::Loading)
+                .continue_to_state(AppState::LoadingComplete)
+                .load_collection::<UiAssets>(),
+        )
+        .init_state::<AppState>();
 
     cfg_if! {
         // allow setup from args
         if #[cfg(feature = "dev")] {
             
             let args = Args::parse();
-
             let entryopy = match args.seed {
                 Some(x) =>EntropyPlugin::<WyRand>::with_seed([x; 8]),
                 None => EntropyPlugin::<WyRand>::new(),
             };
-            app.insert_state(AppState::Game)
+            app
             .init_resource::<GameConfig>()
             .add_plugins((
                 entryopy,
@@ -80,13 +99,6 @@ fn main() {
         .run();
 }
 
-#[derive(Default, States, Debug, Clone, Eq, PartialEq, Hash, Reflect)]
-pub enum AppState {
-    #[default]
-    Splash,
-    Menu,
-    Game,
-}
 
 #[derive(Clone, PartialEq, Eq, Hash, Debug)]
 

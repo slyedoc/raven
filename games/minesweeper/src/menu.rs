@@ -2,6 +2,7 @@ use crate::{AppState, GameConfig, GameMode, ui::*};
 
 use bevy::{ecs::{component::HookContext, spawn::SpawnIter, world::DeferredWorld}, prelude::*};
 use bevy_spawn_observer::SpawnObserver;
+use raven_util::prelude::*;
 pub struct MenuPlugin;
 
 impl Plugin for MenuPlugin {
@@ -27,6 +28,111 @@ pub enum MenuState {
 
 fn setup_main(mut commands: Commands, _asset_server: Res<AssetServer>, ui: Res<UiAssets>) {
     let _font = ui.font.clone();
+
+//  commands.spawn((
+//         Name::new("Menu"),
+//         StateScoped(MenuState::Main),
+//         Node {
+//             width: Val::Percent(100.0),
+//             height: Val::Percent(100.0),
+//             display: Display::Grid,
+//             grid_template_rows: vec![
+//                 // Menu bar
+//                 RepeatedGridTrack::auto(1),
+//                 // Property panel
+//                 RepeatedGridTrack::fr(1, 1.0),
+//                 // Status bar
+//                 RepeatedGridTrack::auto(1),
+//             ],
+//             ..default()
+//         },
+//         Pickable::IGNORE,
+//         children![
+//             (
+//                 Name::new("Menu Bar"),
+//                 Node {
+//                     padding: UiRect::axes(Val::Px(10.0), Val::Px(5.0)),
+//                     column_gap: Val::Px(5.0),
+//                     ..default()
+//                 },
+//                 BackgroundColor(Color::srgb(0.1, 0.1, 0.1)),
+//                 children![
+//                     //button("Load Scene", spawn_load_scene_modal),
+                    
+//                 ]
+//             ),
+//             (
+//                 Name::new("Property Panel"),
+//                 Node {
+//                     width: Val::Px(300.0),
+//                     justify_self: JustifySelf::Start,
+//                     flex_direction: FlexDirection::Column,
+//                     ..default()
+//                 },
+//                 BackgroundColor(Color::srgb(0.3, 0.1, 0.1)),
+//                 children![
+//                     (Name::new("Title"), Text::new("Minesweeper"), H1,),
+//                     (
+//                         Name::new("New Game Button"),
+//                         MenuButton,
+//                         Children::spawn((
+//                             Spawn((
+//                                 MenuButtonInner,
+//                                 //ImageNode::new(asset_server.load("textures/icon/white/plus.png")),
+//                                 Text("New Game".to_string()),
+//                             )),
+//                             SpawnObserver::new(
+//                                 |_trigger: Trigger<Pointer<Click>>, mut commands: Commands| {
+//                                     commands.send_event(FadeTo(AppState::Game));
+//                                 },
+//                             ),
+//                         )),
+//                     ),
+//                      (
+//                         Name::new("Settings Button"),
+//                         MenuButton,
+//                         Children::spawn((
+//                             Spawn((MenuButtonInner, Text::new("Settings"))),
+//                             SpawnObserver::new(
+//                                 |_trigger: Trigger<Pointer<Click>>, mut commands: Commands| {
+//                                     commands.set_state(MenuState::Settings);
+//                                 },
+//                             ),
+//                             //ImageNode::new(asset_server.load("textures/icon/white/checkmark.png")),
+//                         )),
+//                     ),
+//                     #[cfg(not(target_arch = "wasm32"))]
+//                     (
+//                         Name::new("Exit Button"),
+//                         MenuButton,
+//                         Children::spawn((
+//                             Spawn((MenuButtonInner, Text::new("Exit"))),
+//                             SpawnObserver::new(
+//                                 |_trigger: Trigger<Pointer<Click>>, mut commands: Commands| {
+//                                     commands.send_event(AppExit::Success);
+//                                 },
+//                             ),
+//                             //ImageNode::new(asset_server.load("textures/icon/white/exitRight.png")),
+//                         )),
+//                     )
+//                 ]
+//             ),
+//             (
+//                 Name::new("Status Bar"),
+//                 Node {
+//                     display: Display::Flex,
+//                     justify_content: JustifyContent::SpaceBetween,
+//                     padding: UiRect::axes(Val::Px(10.0), Val::Px(5.0)),
+//                     ..default()
+//                 },
+//                 BackgroundColor(Color::srgb(0.1, 0.1, 0.1)),
+//                 children![
+//                     status_bar_text("Status Bar"),
+//                     status_bar_text("v0.1.0")
+//                 ],
+//             )
+//         ],
+//     ));
 
     commands
         .spawn((
@@ -112,20 +218,14 @@ fn setup_main(mut commands: Commands, _asset_server: Res<AssetServer>, ui: Res<U
             ));
         });
 
-    commands.spawn((
-        Name::new("Version Text"),
-        StateScoped(AppState::Menu),
-        Node {
-            position_type: PositionType::Absolute,
-            right: Val::Px(5.),
-            bottom: Val::Px(5.),
-            ..default()
-        },
-        children!((
-            Text("Version: 0.1.0".to_string()),
-            //ImageNode::new(asset_server.load("textures/icon/white/exitRight.png")),
-        )),
-    ));
+}
+
+fn status_bar_text(text: impl Into<String>) -> impl Bundle {
+    (
+        Text::new(text),
+        TextFont::from_font_size(15.0),
+        TextColor(Color::srgb(0.9, 0.9, 0.9)),
+    )
 }
 
 fn setup_settings(mut commands: Commands, ui: Res<UiAssets>,) {

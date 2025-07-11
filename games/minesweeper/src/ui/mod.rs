@@ -1,5 +1,4 @@
-mod fade;
-pub use fade::*;
+
 mod menu;
 pub use menu::*;
 mod cell;
@@ -11,20 +10,9 @@ use bevy::{
     prelude::*,
 };
 
+use raven_util::prelude::*;
+use bevy_asset_loader::prelude::*;
 use crate::{AppState, game::GamePhase};
-
-pub struct UiPlugin;
-
-impl Plugin for UiPlugin {
-    fn build(&self, app: &mut App) {
-        app.add_plugins((
-            FadePlugin::<AppState>::default(),
-            FadePlugin::<GamePhase>::default(),
-        ))
-        .init_resource::<UiAssets>();
-    }
-}
-
 
 pub const BACKGROUND_COLOR: Color = Color::Srgba(tailwind::GRAY_900);
 pub const PANEL_BACKGROUND: Color = Color::Srgba(tailwind::GRAY_800);
@@ -51,26 +39,23 @@ pub const HOVERED_SLIDER_TRACK: Color = Color::Srgba(tailwind::GRAY_400);
 pub const SLIDER_THUMB_COLOR: Color = Color::Srgba(tailwind::GRAY_200);
 pub const HOVERED_SLIDER_THUMB: Color = Color::Srgba(tailwind::GRAY_400);
 
-#[derive(Resource)]
+
+#[derive(AssetCollection, Resource)]
 pub struct UiAssets {
+
+    #[asset(path = "fonts/FiraMono-Medium.ttf")]
     pub font: Handle<Font>,
+    
+    #[asset(path = "icon/medal1.png")]    
     pub flag: Handle<Image>,
+    
+    #[asset(path = "icon/question.png")]
     pub question: Handle<Image>,
+    
+    #[asset(path = "icon/cross.png")]    
     pub bomb: Handle<Image>,
 }
 
-impl FromWorld for UiAssets {
-    fn from_world(world: &mut World) -> Self {
-        let asset_server = world.resource::<AssetServer>();
-
-        UiAssets {
-            font: asset_server.load("fonts/FiraMono-Medium.ttf"),
-            flag: asset_server.load("icon/medal1.png"),
-            question: asset_server.load("icon/question.png"),
-            bomb: asset_server.load("icon/cross.png"),
-        }
-    }
-}
 
 #[derive(Component)]
 #[component(on_add = on_add_focus)]

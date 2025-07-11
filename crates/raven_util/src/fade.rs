@@ -54,9 +54,10 @@ struct FadeOverlay<T: FreelyMutableState> {
 }
 
 fn on_add_fade(mut world: DeferredWorld<'_>, HookContext { entity, .. }: HookContext) {
+
     let tween = Tween::new(
         EaseFunction::QuadraticIn,
-        Duration::from_secs_f32(0.2),
+        Duration::from_secs_f32(0.3),
         UiBackgroundColorLens {
             start: Color::NONE,
             end: Color::BLACK,
